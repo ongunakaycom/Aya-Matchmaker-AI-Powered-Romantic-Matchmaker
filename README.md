@@ -17,16 +17,15 @@ Unlike dating apps that match on self-reported profile data, Aya extracts charac
 ---
 
 ## 📐 System at a Glance
-
-```
 React SPA (Firebase Hosting)
-        ↓
+↓
 Cloud Functions (Node.js)
-        ↓
-   ├── Firestore (users, chats, matches)
-   ├── Gemini API (character analysis + conversation)
-   └── Firebase Auth (anonymous + registered)
-```
+↓
+├── Firestore (users, chats, matches)
+├── Gemini API (character analysis + conversation)
+└── Firebase Auth (anonymous + registered)
+
+text
 
 ---
 
@@ -124,6 +123,8 @@ Full flow diagrams in [`architecture.md`](./architecture.md).
 | [`architecture.md`](./architecture.md) | System design, Firestore schema, Cloud Functions flow, failure modes, cost profile |
 | [`conversation-design.md`](./conversation-design.md) | Prompt strategy, elicitation ladder, tone guide, boundaries, anti-patterns |
 | [`character-extraction.md`](./character-extraction.md) | Trait taxonomy, extraction prompt contract, confidence scoring, corrections, versioning |
+| [`match-algorithm.md`](./match-algorithm.md) | Hard filters, scoring model, thresholds, tie-breaking, feedback loop |
+| [`engineering-notes.md`](./engineering-notes.md) | Trade-offs, lessons learned, stack summary |
 
 ---
 
