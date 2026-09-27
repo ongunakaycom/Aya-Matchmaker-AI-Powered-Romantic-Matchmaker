@@ -57,23 +57,32 @@ Cloud Functions (Node.js)
 
 ## 💬 Conversational Design
 
-Aya's job is not to answer questions about dating — it's to build a working model of the user. From a live session:
+Aya is designed as a **character-elicitation agent**, not a Q&A bot. Every reply serves one of three goals:
 
-> **User:** "40 years old man 181cm 90k"
-> **Aya:** "Okay, great! So you're a 40-year-old man, 181cm tall, and 90kg. That's a good start! 😊 To help me find your perfect match, could you tell me a little more about what you're looking for in a woman?"
+| Goal | Behavior |
+|---|---|
+| **Elicit** | Ask the next highest-signal question (interests, values, dealbreakers) |
+| **Reflect** | Confirm a trait before storing it |
+| **Defer** | Politely avoid revealing match identity or other users' data |
 
-The bot:
-- Extracts structured attributes from free-form messages
-- Reflects them back to confirm
-- Asks the next highest-signal question
-- Never invents a match before enough signal is collected
-- Refuses to expose the other user's identity until both sides consent
+The prompt layer enforces one question per turn, no fabrication, consent boundaries, and tone adaptation. Full strategy in [`conversation-design.md`](./conversation-design.md).
+
+---
+
+## 🧬 Character Extraction
+
+The extraction pipeline runs on each turn and writes to Firestore:
+
+- **Static traits** — age, height, gender, location, relationship intent
+- **Soft traits** — hobbies, values, communication style, openness
+- **Dealbreakers** — explicit non-negotiables stated by the user
+- **Confidence** — per-trait confidence score, updated as the user reveals more
+
+The match layer only consumes traits above a minimum confidence threshold, which prevents premature matching on weak signal. Full taxonomy in [`character-extraction.md`](./character-extraction.md).
 
 ---
 
 ## 🔌 Cloud Functions Surface
-
-Firebase Functions handle the full backend:
 
 | Function | Responsibility |
 |---|---|
@@ -82,6 +91,9 @@ Firebase Functions handle the full backend:
 | `findMatch` | Scores candidates against extracted traits |
 | `contactMatch` | Sends the introduction to a potential match |
 | `scheduleDate` | Coordinates time/place once both sides agree |
+| `postDateFeedback` | Collects feedback after a date and adjusts future matches |
+
+Full flow diagrams in [`architecture.md`](./architecture.md).
 
 ---
 
@@ -102,6 +114,7 @@ Firebase Functions handle the full backend:
 - Gender/preference parsing occasionally misfires (documented in logs)
 - Aya only operates in Manchester; other cities are waitlist-only
 - No automated test coverage yet
+- Session-level memory only; no long-term cross-session user model yet
 
 ---
 
@@ -109,12 +122,15 @@ Firebase Functions handle the full backend:
 
 | File | Contents |
 |---|---|
-| `architecture.md` | System design, Firestore schema, function flow |
-| `conversation-design.md` | Prompt strategy, personality extraction rules |
-| `engineering-notes.md` | Trade-offs, lessons learned, roadmap |
+| [`architecture.md`](./architecture.md) | System design, Firestore schema, Cloud Functions flow, failure modes, cost profile |
+| [`conversation-design.md`](./conversation-design.md) | Prompt strategy, elicitation ladder, tone guide, boundaries, anti-patterns |
+| [`character-extraction.md`](./character-extraction.md) | Trait taxonomy, extraction prompt contract, confidence scoring, corrections, versioning |
 
 ---
 
 ## 📜 License
 
 MIT — see [LICENSE](./LICENSE).
+
+**Author:** Ongun Akay
+**Status:** ✅ Live in production
