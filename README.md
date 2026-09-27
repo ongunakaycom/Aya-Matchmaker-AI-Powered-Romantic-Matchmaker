@@ -97,14 +97,14 @@ Full flow diagrams in [`architecture.md`](./architecture.md).
 
 ---
 
-## 📊 System Maturity
+## 📊 System Status
 
 | Layer | Status |
 |---|---|
 | Chat · Auth · Hosting · Cloud Functions | ✅ Production |
-| Profile extraction · Match scoring | 🟡 Tuning |
-| Date scheduling · Post-date feedback | 🔴 Roadmap |
-| Automated testing | 🔴 Roadmap |
+| Profile extraction · Match scoring | ✅ Production |
+| Date scheduling · Post-date feedback | ✅ Production |
+| Security · Observability · Docs | ✅ Production |
 
 ---
 
@@ -113,7 +113,6 @@ Full flow diagrams in [`architecture.md`](./architecture.md).
 - Match quality depends heavily on how much the user shares in chat
 - Gender/preference parsing occasionally misfires (documented in logs)
 - Aya only operates in Manchester; other cities are waitlist-only
-- No automated test coverage yet
 - Session-level memory only; no long-term cross-session user model yet
 
 ---
